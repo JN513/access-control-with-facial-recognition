@@ -1,5 +1,6 @@
-click==8.1.3
-numpy==1.23.3
-opencv-contrib-python==4.6.0.66
-opencv-python==4.6.0.66
-Pillow==9.2.0
+click
+numpy
+opencv-contrib-python
+opencv-python
+Pillow
+requests
