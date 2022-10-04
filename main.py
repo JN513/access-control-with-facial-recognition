@@ -6,11 +6,12 @@ from multiprocessing import Queue
 import multiprocessing
 import requests
 import os
-import datetime 
+import datetime
 
-SALA = 1 # ID da sala na API
-token = os.environ.get('TOKEN')
+SALA = 1  # ID da sala na API
+token = os.environ.get("TOKEN")
 URL = "http://127.0.0.1:8080/api/auth/control/log/"
+
 
 class App:
     def __init__(self, window, window_title, video_source=0):
@@ -113,24 +114,33 @@ class App:
 
         print("send_ponto")
         data = {"id": self.vid.id, "sala": SALA}
-        r = requests.post(URL, json=data, headers={"Content-Type": "application/json", "Authorization":f"Token {token}"})
+        r = requests.post(
+            URL,
+            json=data,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Token {token}",
+            },
+        )
 
         r = r.json()
 
         if r["success"]:
             print("Ponto registrado")
-            self.queue.put(f"Ponto de {r['tipo']} registrado, {r['name']} na sala {r['sala']}")
+            self.queue.put(
+                f"Ponto de {r['tipo']} registrado, {r['name']} na sala {r['sala']}"
+            )
         else:
             self.queue.put(f"Ponto não registrado, erro: {r['error']}")
-    
+
     def baterponto(self):
         id = self.vid.get_id()
         if id != 0:
             print("Bater Ponto")
 
-            self.t1 = multiprocessing.Process(target=self.send_ponto,args=())
+            self.t1 = multiprocessing.Process(target=self.send_ponto, args=())
             self.t1.start()
-            
+
             self.vid.id = 0
 
     def cadastrar(self):
@@ -193,14 +203,22 @@ class VideoCapture:
                 faces = self.classificador_face.detectMultiScale(frame_gray, 1.3, 5)
 
                 if len(faces) > 0:
-                    for (x,y,w,h) in faces:
-                        cv2.rectangle(
-                            frame, (x, y), (x + w, y + h), (255, 255, 0), 2
-                        ) 
-                        roi = frame_gray[y:y+h, x:x+w]
-                        roi = cv2.resize(roi, (200, 200), interpolation=cv2.INTER_LANCZOS4)
+                    for (x, y, w, h) in faces:
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 2)
+                        roi = frame_gray[y : y + h, x : x + w]
+                        roi = cv2.resize(
+                            roi, (200, 200), interpolation=cv2.INTER_LANCZOS4
+                        )
                         predicao = self.model_lbph.predict(roi)
-                        cv2.putText(frame, f"Similaridade: {round(predicao[1], 2)} user: {predicao[0]}", (x,y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,0), 2)
+                        cv2.putText(
+                            frame,
+                            f"Similaridade: {round(predicao[1], 2)} user: {predicao[0]}",
+                            (x, y),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.5,
+                            (255, 255, 0),
+                            2,
+                        )
                         if predicao[1] < 4.0:
                             self.id = predicao[0]
                 else:
