@@ -1,4 +1,4 @@
-from asyncio.windows_events import NULL
+import os
 import cv2
 import numpy as np
 import requests
@@ -22,22 +22,39 @@ def padronizar_imagem(img):
     return imagem
 
 
-def login(email, senha):
-    r = requests.post(URL, json={"email": email, "senha": senha})
+def login(email, password):
+    r = requests.post(
+        URL,
+        json={"email": email, "password": password},
+        headers={"Content-Type": "application/json"},
+    )
     if r.status_code != 200:
-        return False, NULL
+        return False, None, None
 
     r = r.json()
     token = r["access"]
 
-    r = requests.get(URL_PERFIL, headers={"Authorization": f"Bearer {token}"})
+    r = requests.get(
+        URL_PERFIL,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        },
+    )
     if "success" in r.json():
-        return True, r.json()["user"]["id"]
+        return True, r.json()["user"]["id"], r.json()["user"]["first_name"]
     else:
-        return False, NULL
+        return False, None, None
 
 
 def main(id):
+    # verifica se exite a pasta dataset
+
+    if not os.path.exists("dataset"):
+        os.mkdir("dataset")
+
+    print("Coletando imagens...")
+
     try:
         contador = 0
 
@@ -124,11 +141,13 @@ def main(id):
 
 if __name__ == "__main__":
     email = input("Email: ")
-    senha = getpass.getpass("Senha: ")
+    password = getpass.getpass("Senha: ")
 
-    login_ok, id = login(email, senha)
+    login_ok, id, name = login(email, password)
 
     if login_ok:
         main(id)
+
+        print(f"Imagens Coletadas com sucesso {name}")
     else:
         print("Login falhou")

@@ -17,39 +17,46 @@ def padronizar_imagens(img_caminho):
     return imagem
 
 
-lista_faces_treino = [
-    f for f in listdir(faces_path_treino) if isfile(join(faces_path_treino, f))
-]  # pega todas as imagens do diretorio de treino
+def treinar():
+    lista_faces_treino = [
+        f for f in listdir(faces_path_treino) if isfile(join(faces_path_treino, f))
+    ]  # pega todas as imagens do diretorio de treino
 
-dados_treinamento, sujeitos = [], []
+    dados_treinamento, sujeitos = [], []
 
-for i, arq in enumerate(
-    lista_faces_treino
-):  # padroniza a imagem e add a lista de dados de treinamento
-    img_path = faces_path_treino + arq
-    imagem = padronizar_imagens(img_path)
-    dados_treinamento.append(imagem)
-    sujeito = arq[1:2]  # pega o id do sujeito
-    sujeitos.append(int(sujeito))  # adiciona a um vetor/lista
+    for i, arq in enumerate(
+        lista_faces_treino
+    ):  # padroniza a imagem e add a lista de dados de treinamento
+        img_path = faces_path_treino + arq
+        imagem = padronizar_imagens(img_path)
+        dados_treinamento.append(imagem)
+        sujeito = arq[1:2]  # pega o id do sujeito
+        sujeitos.append(int(sujeito))  # adiciona a um vetor/lista
 
-sujeitos = np.asarray(sujeitos, dtype=np.int32)  # transforma a lista em um array numpy
+    sujeitos = np.asarray(
+        sujeitos, dtype=np.int32
+    )  # transforma a lista em um array numpy
 
-print("Treinando...")
+    print("Treinando...")
 
-print("LBPH... ", end="")
+    print("LBPH... ", end="")
 
-model_lbph = cv2.face.LBPHFaceRecognizer_create(1, 1, 7, 7)
-model_lbph.train(dados_treinamento, sujeitos)
-print("OK")
-model_lbph.save("classificadores/lbph_trainigdata.xml")
+    model_lbph = cv2.face.LBPHFaceRecognizer_create(1, 1, 7, 7)
+    model_lbph.train(dados_treinamento, sujeitos)
+    print("OK")
+    model_lbph.save("classificadores/lbph_trainigdata.xml")
 
-print("Modelo LBPH, gerado e salvo.")
+    print("Modelo LBPH, gerado e salvo.")
 
-print("Eigenface... ", end="")
+    print("Eigenface... ", end="")
 
-model_eigenface = cv2.face.EigenFaceRecognizer_create(15)
-model_eigenface.train(dados_treinamento, sujeitos)
-print("OK")
-model_eigenface.save("classificadores/eigenface_trainigdata.xml")
+    model_eigenface = cv2.face.EigenFaceRecognizer_create(15)
+    model_eigenface.train(dados_treinamento, sujeitos)
+    print("OK")
+    model_eigenface.save("classificadores/eigenface_trainigdata.xml")
 
-print("Modelo Eigenface, gerado e salvo.")
+    print("Modelo Eigenface, gerado e salvo.")
+
+
+if __name__ == "__main__":
+    treinar()
