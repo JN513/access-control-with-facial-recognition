@@ -10,7 +10,7 @@ def padronizar_imagem(img):
     imagem = cv2.cvtColor(imagem, cv2.COLOR_BGR2RGB)
     return imagem
 
-id = 1
+id = 1 # ID do usuario, precisa implementar authenticação, isso e 2 palito, mas tem que fazer
 
 try:
 

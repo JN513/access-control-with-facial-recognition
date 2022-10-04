@@ -2,9 +2,15 @@ import tkinter as tk
 import cv2
 import PIL.Image, PIL.ImageTk
 import time
-import datetime as dt
-import argparse
+from multiprocessing import Queue
+import multiprocessing
+import requests
+import os
+import datetime 
 
+SALA = 1 # ID da sala na API
+token = os.environ.get('TOKEN')
+URL = "http://127.0.0.1:8080/api/auth/control/log/"
 
 class App:
     def __init__(self, window, window_title, video_source=0):
@@ -12,6 +18,7 @@ class App:
         self.window.title(window_title)
         self.video_source = video_source
         self.ok = False
+        self.queue = Queue()
 
         self.top_title = tk.Label(
             window,
@@ -80,6 +87,8 @@ class App:
         self.label_result.pack(fill=tk.X)
 
         # After it is called once, the update method will be automatically called every delay milliseconds
+
+        self.window.after(100, self.check_result, self.queue)
         self.delay = 10
         self.update()
 
@@ -91,15 +100,38 @@ class App:
 
         if ret:
             cv2.imwrite(
-                "frame-" + time.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg",
+                "snapshots/frame-" + time.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg",
                 cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),
             )
 
+    def check_result(self, queue):
+        if not queue.empty():
+            self.label_result["text"] = queue.get()
+        self.window.after(100, self.check_result, queue)
+
+    def send_ponto(self):
+
+        print("send_ponto")
+        data = {"id": self.vid.id, "sala": SALA}
+        r = requests.post(URL, json=data, headers={"Content-Type": "application/json", "Authorization":f"Token {token}"})
+
+        r = r.json()
+
+        if r["success"]:
+            print("Ponto registrado")
+            self.queue.put(f"Ponto de {r['tipo']} registrado, {r['name']} na sala {r['sala']}")
+        else:
+            self.queue.put(f"Ponto não registrado, erro: {r['error']}")
+    
     def baterponto(self):
         id = self.vid.get_id()
-        print("Bater Ponto")
-        self.label_result["text"] = f"Bater Ponto {id}"
-        self.vid.id = 0
+        if id != 0:
+            print("Bater Ponto")
+
+            self.t1 = multiprocessing.Process(target=self.send_ponto,args=())
+            self.t1.start()
+            
+            self.vid.id = 0
 
     def cadastrar(self):
         ...
