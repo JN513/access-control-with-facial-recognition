@@ -127,4 +127,4 @@ Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE](
 
 ## Duvidas e Sugestões
 
-Caso tenha alguma dúvida ou sugestão, fique a vontade para reportar no campo de **issues**.
+Caso tenha alguma dúvida ou sugestão, fique a vontade para reportar no campo de [**issues**](https://github.com/JN513/access-control-with-facial-recognition/issues).
