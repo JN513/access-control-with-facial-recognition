@@ -122,7 +122,7 @@ class App:
                 "Authorization": f"Token {token}",
             },
         )
-        
+
         r = r.json()
 
         if "success" in r:
