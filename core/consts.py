@@ -8,7 +8,7 @@ URL_LOG = "http://127.0.0.1:8080/api/auth/control/log/"
 
 TOKEN = os.environ.get("TOKEN")
 
-SALA = 1 
+SALA = 1
 
 STD_DIMENSIONS = {
     "480p": (640, 480),
