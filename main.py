@@ -122,14 +122,15 @@ class App:
                 "Authorization": f"Token {token}",
             },
         )
-
+        
         r = r.json()
 
-        if r["success"]:
-            print("Ponto registrado")
-            self.queue.put(
-                f"Ponto de {r['tipo']} registrado, {r['name']} na sala {r['sala']}"
-            )
+        if "success" in r:
+            if r["success"]:
+                print("Ponto registrado")
+                self.queue.put(
+                    f"Ponto de {r['tipo']} registrado, {r['name']} na sala {r['sala']}"
+                )
         else:
             self.queue.put(f"Ponto não registrado, erro: {r['error']}")
 
