@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import dlib
 from core.models import (
     get_frontal_face_detector,
     get_face_recognition_dlib,

@@ -1,4 +1,3 @@
-import face_recognition as f
 import cv2
 import dlib
 import numpy as np
