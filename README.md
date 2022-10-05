@@ -2,6 +2,8 @@
 
 Ponto para controle de acesso de alunos no laboratorio de pesquisa utilizando reconhecimento facial.
 
+![Ponto Lab Soft](/test/print.png)
+
 ## Autores:
 
 - Julio Nunes Avelar
@@ -21,7 +23,7 @@ Ponto para controle de acesso de alunos no laboratorio de pesquisa utilizando re
 ### Hardware:
 
 - Webcam
-- Raspberry Pi 3 ou superior
+- Raspberry Pi 3 ou superior ou qualquer outro computador que possa utilizar uma webcam
 
 ## Instalação
 
@@ -121,6 +123,7 @@ Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE](
 
 - [OpenCV](https://opencv.org/)
 - [Dlib](http://dlib.net/)
+- [Laboratório de Tecnologias de Software e Computação Aplicada à Educação - LabSoft](http://labsoft.muz.ifsuldeminas.edu.br/)
 
 ## Duvidas e Sugestões
 

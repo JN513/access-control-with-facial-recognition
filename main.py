@@ -218,7 +218,7 @@ class VideoCapture:
 
 def main():
     # Create a window and pass it to the Application object
-    App(tk.Tk(), "Video Recorder")
+    App(tk.Tk(), "Ponto Labsoft")
 
 
 main()
