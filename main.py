@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 import cv2
 import dlib
 import PIL.Image, PIL.ImageTk
@@ -54,9 +55,14 @@ class App:
             self.window = self.set_register_screen()
 
     def treinar(self):
+        self.queue.put("Treinando")
+        
         treinar([self.id])
 
-        self.users, self.encodings = get_all()
+        users, encodings = get_all()
+
+        self.users = users
+        self.encodings = encodings
 
         self.queue.put("Treinamento realizado com sucesso")
 
@@ -144,7 +150,15 @@ class App:
                     self.vid.atual = 0
                     self.counter = 1
                     self.id = payload["user_id"]
-
+                    if not os.path.exists("dataset"):
+                        os.mkdir("dataset")
+                    if not os.path.exists("dataset_bgr"):
+                        os.mkdir("dataset_bgr")
+                else:
+                    self.mode = 0
+                    self.id = 0
+                    self.queue.put(f"Erro ao autenticar Usuario, erro: {payload['error']}")
+                    self.voltar()
                     # self.after = self.window.after(self.delay, self.update)
 
             else:

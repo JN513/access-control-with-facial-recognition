@@ -57,14 +57,14 @@ def insert_array(user_id, encoding):
 def insert_data_alter(user_id):
     con = get_database()
     cur = con.cursor()
-    cur.execute("INSERT INTO data_alter (user_id, encoding) VALUES (?)", (user_id,))
+    cur.execute("INSERT INTO data_alter (user_id) VALUES (?)", (user_id,))
     con.commit()
 
 
 def insert_user_acess(user_id):
     con = get_database()
     cur = con.cursor()
-    cur.execute("INSERT INTO user_acess (user_id, encoding) VALUES (?)", (user_id,))
+    cur.execute("INSERT INTO user_acess (user_id) VALUES (?)", (user_id,))
     con.commit()
 
 
