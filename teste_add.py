@@ -1,23 +1,14 @@
-import os
 import cv2
 import numpy as np
-import getpass
 import dlib
+from core.models import get_frontal_face_detector, get_face_recognition_dlib, get_shape_predictor_dlib
 
-URL = "http://localhost:8080/api/token/"
-URL_PERFIL = "http://localhost:8080/api/user/getdata/"
 
-classificador_face = cv2.CascadeClassifier(
-    "classificadores/haarcascade_frontalface_default.xml"
-)
+classificador_face = get_frontal_face_detector()
 
-face_encoder = dlib.face_recognition_model_v1(
-    "classificadores/dlib_face_recognition_resnet_model_v1.dat"
-)
+face_encoder = get_face_recognition_dlib()
 
-predictor = dlib.shape_predictor(
-    "classificadores/shape_predictor_68_face_landmarks.dat"
-)
+predictor = get_shape_predictor_dlib()
 
 captura_video = cv2.VideoCapture(0)
 

@@ -4,13 +4,9 @@ import PIL.Image, PIL.ImageTk
 import time
 from multiprocessing import Queue
 import multiprocessing
-import requests
-import os
-import datetime
-
-SALA = 1  # ID da sala na API
-token = os.environ.get("TOKEN")
-URL = "http://127.0.0.1:8080/api/auth/control/log/"
+from core.consts import STD_DIMENSIONS
+from core.api_client import send_ponto
+from core.models import get_frontal_face_detector
 
 
 class App:
@@ -113,26 +109,16 @@ class App:
     def send_ponto(self):
 
         print("send_ponto")
-        data = {"id": self.vid.id, "sala": SALA}
-        r = requests.post(
-            URL,
-            json=data,
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Token {token}",
-            },
-        )
+        status_code, payload = send_ponto(self.vid.id)
 
-        r = r.json()
-
-        if "success" in r:
-            if r["success"]:
+        if "success" in payload:
+            if payload["success"]:
                 print("Ponto registrado")
                 self.queue.put(
-                    f"Ponto de {r['tipo']} registrado, {r['name']} na sala {r['sala']}"
+                    f"Ponto de {payload['tipo']} registrado, {payload['name']} na sala {payload['sala']}"
                 )
         else:
-            self.queue.put(f"Ponto não registrado, erro: {r['error']}")
+            self.queue.put(f"Ponto não registrado, erro: {payload['error']}")
 
     def baterponto(self):
         id = self.vid.get_id()
@@ -163,9 +149,7 @@ class App:
 class VideoCapture:
     def __init__(self, video_source=0):
         # Open the video source
-        self.classificador_face = cv2.CascadeClassifier(
-            "classificadores/haarcascade_frontalface_default.xml"
-        )
+        self.classificador_face = get_frontal_face_detector()
         self.model_lbph = cv2.face.LBPHFaceRecognizer_create(2, 2, 7, 7, 15)
         self.model_lbph.read("classificadores/lbph_trainigdata.xml")
         self.id = 0
@@ -176,13 +160,6 @@ class VideoCapture:
         if not self.vid.isOpened():
             raise ValueError("Unable to open video source", video_source)
 
-        # 2. Video Dimension
-        STD_DIMENSIONS = {
-            "480p": (640, 480),
-            "720p": (1280, 720),
-            "1080p": (1920, 1080),
-            "4k": (3840, 2160),
-        }
         res = STD_DIMENSIONS["480p"]
 
         # set video sourec width and height

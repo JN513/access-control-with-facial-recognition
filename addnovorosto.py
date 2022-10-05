@@ -1,50 +1,14 @@
 import os
 import cv2
 import numpy as np
-import requests
 import getpass
+from core import padronizar_imagem, padronizar_face
+from core.auth import login
+from core.models import get_frontal_face_detector
 
-URL = "http://localhost:8080/api/token/"
-URL_PERFIL = "http://localhost:8080/api/user/getdata/"
-
-classificador_face = cv2.CascadeClassifier(
-    "classificadores/haarcascade_frontalface_default.xml"
-)
+classificador_face = get_frontal_face_detector()
 
 captura_video = cv2.VideoCapture(0)
-
-
-def padronizar_imagem(img):
-    imagem = cv2.resize(
-        img, (640, 480), interpolation=cv2.INTER_LANCZOS4
-    )  # imagem, tamanho de saida, e interpolação
-    imagem = cv2.cvtColor(imagem, cv2.COLOR_BGR2RGB)
-    return imagem
-
-
-def login(email, password):
-    r = requests.post(
-        URL,
-        json={"email": email, "password": password},
-        headers={"Content-Type": "application/json"},
-    )
-    if r.status_code != 200:
-        return False, None, None
-
-    r = r.json()
-    token = r["access"]
-
-    r = requests.get(
-        URL_PERFIL,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        },
-    )
-    if "success" in r.json():
-        return True, r.json()["user"]["id"], r.json()["user"]["first_name"]
-    else:
-        return False, None, None
 
 
 def main(id):
@@ -63,7 +27,7 @@ def main(id):
 
             if captura_ok:
                 frame = padronizar_imagem(frame)
-                frame_gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+                frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
                 faces = classificador_face.detectMultiScale(
                     frame_gray, 1.3, 5
@@ -75,9 +39,7 @@ def main(id):
                     if contador <= 100:
                         for (x, y, w, h) in faces:
                             roi = frame_gray[y : y + h, x : x + w]
-                            cv2.resize(
-                                roi, (200, 200), interpolation=cv2.INTER_LANCZOS4
-                            )
+                            roi = padronizar_face(roi)
                             cv2.imwrite(
                                 "dataset/"
                                 + "u"
@@ -123,9 +85,6 @@ def main(id):
                         frame, (x, y), (x + w, y + h), (255, 255, 0), 2
                     )  # imagem, extremidades do retangulo, cor, expessuras
 
-                frame = cv2.cvtColor(
-                    frame, cv2.COLOR_RGB2BGR
-                )  # opcional, pra cor não ficar bugada
                 cv2.imshow("janela", frame)
 
                 k = cv2.waitKey(30) & 0xFF  # pega a tecla esc

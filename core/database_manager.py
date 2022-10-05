@@ -1,11 +1,10 @@
-from operator import imod
 import sqlite3 as sql
 import numpy as np
 import io
-
+from core.consts import DATABASE
 
 def create():
-    con = sql.connect("database.bd", isolation_level=None)
+    con = sql.connect(DATABASE, isolation_level=None)
     cur = con.cursor()
     cur.execute(
         "CREATE TABLE encoding ( id SERIAL PRIMARY KEY, user_id INTEGER NOT NULL, encoding BLOB NOT NULL );"
@@ -24,3 +23,11 @@ def convert_array(text):
     out = io.BytesIO(text)
     out.seek(0)
     return np.load(out)
+
+def insert_array (user_id, encoding):
+    blob = adapt_array(encoding)
+
+    con = sql.connect(DATABASE, isolation_level=None)
+    cur = con.cursor()
+    cur.execute("INSERT INTO encoding (user_id, encoding) VALUES (?, ?)", (user_id, blob))
+    con.commit()
