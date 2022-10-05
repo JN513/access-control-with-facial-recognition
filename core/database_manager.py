@@ -31,7 +31,7 @@ def create_database():
     con = get_database()
     cur = con.cursor()
     cur.execute(
-        "CREATE TABLE encoding ( id SERIAL PRIMARY KEY, user_id INTEGER NOT NULL, encoding BLOB NOT NULL );"
+        "CREATE TABLE encoding ( id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, encoding BLOB NOT NULL );"
     )
     con.commit()
 
@@ -51,11 +51,12 @@ def get_array(user_id):
     con = get_database()
     cur = con.cursor()
     cur.execute("SELECT encoding FROM encoding WHERE user_id = ?", (user_id,))
-    return cur.fetchone()[0]
+    return [convert_array(blob[0]) for blob in cur.fetchall()]
 
 
 def get_all():
     con = get_database()
     cur = con.cursor()
     cur.execute("SELECT * FROM encoding")
+
     return cur.fetchall()

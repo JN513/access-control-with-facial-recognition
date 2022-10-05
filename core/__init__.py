@@ -14,3 +14,9 @@ def padronizar_imagem(img):
 def padronizar_face(img):
     img = cv2.resize(img, (200, 200), interpolation=cv2.INTER_LANCZOS4)
     return img
+
+
+def cv2_to_dlib_rect(cv2_rect):
+    return dlib.rectangle(
+        cv2_rect[0], cv2_rect[1], cv2_rect[0] + cv2_rect[2], cv2_rect[1] + cv2_rect[3]
+    )

@@ -6,7 +6,7 @@ from core.models import (
     get_face_recognition_dlib,
     get_shape_predictor_dlib,
 )
-
+from core import cv2_to_dlib_rect
 
 classificador_face = get_frontal_face_detector()
 
@@ -15,12 +15,6 @@ face_encoder = get_face_recognition_dlib()
 predictor = get_shape_predictor_dlib()
 
 captura_video = cv2.VideoCapture(0)
-
-
-def cv2_to_dlib_rect(cv2_rect):
-    return dlib.rectangle(
-        cv2_rect[0], cv2_rect[1], cv2_rect[0] + cv2_rect[2], cv2_rect[1] + cv2_rect[3]
-    )
 
 
 def main():

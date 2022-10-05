@@ -1,4 +1,4 @@
-import requests]
+import requests
 from core.consts import URL, URL_PERFIL
 
 
@@ -25,4 +25,3 @@ def login(email, password):
         return True, r.json()["user"]["id"], r.json()["user"]["first_name"]
     else:
         return False, None, None
-
