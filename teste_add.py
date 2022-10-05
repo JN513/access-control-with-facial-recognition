@@ -114,4 +114,12 @@ def main():
 if __name__ == "__main__":
     encodings = main()
 
-    print(encodings)
+    #print(encodings)
+
+    last = encodings[-1]
+
+    encodings = encodings[:-2]
+
+    r = list(np.linalg.norm(encodings - last, axis=1) <= 0.6 )
+
+    print(r)
