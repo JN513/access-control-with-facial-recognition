@@ -21,10 +21,12 @@ predictor = dlib.shape_predictor(
 
 captura_video = cv2.VideoCapture(0)
 
+
 def cv2_to_dlib_rect(cv2_rect):
     return dlib.rectangle(
         cv2_rect[0], cv2_rect[1], cv2_rect[0] + cv2_rect[2], cv2_rect[1] + cv2_rect[3]
     )
+
 
 def main():
     # verifica se exite a pasta dataset
@@ -58,7 +60,9 @@ def main():
                             roi_bgr = frame[y : y + h, x : x + w]
                             dlib_rect = cv2_to_dlib_rect((x, y, w, h))
                             shape = predictor(roi, dlib_rect)
-                            encodig = np.array(face_encoder.compute_face_descriptor(roi_bgr, shape, 1))
+                            encodig = np.array(
+                                face_encoder.compute_face_descriptor(roi_bgr, shape, 1)
+                            )
                             encodings.append(encodig)
 
                         cv2.putText(
@@ -114,12 +118,12 @@ def main():
 if __name__ == "__main__":
     encodings = main()
 
-    #print(encodings)
+    # print(encodings)
 
     last = encodings[-1]
 
     encodings = encodings[:-2]
 
-    r = list(np.linalg.norm(encodings - last, axis=1) <= 0.6 )
+    r = list(np.linalg.norm(encodings - last, axis=1) <= 0.6)
 
     print(r)

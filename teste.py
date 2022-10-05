@@ -34,7 +34,9 @@ if len(faces) > 0:
     for (x, y, w, h) in faces:
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 2)
         face_image = img[y : y + h, x : x + w]
-        face_image = cv2.resize(face_image, (200, 200), interpolation=cv2.INTER_LANCZOS4)
+        face_image = cv2.resize(
+            face_image, (200, 200), interpolation=cv2.INTER_LANCZOS4
+        )
         dlib_rect = cv2_to_dlib_rect((x, y, w, h))
         shape = predictor(img_gray, dlib_rect)
 
@@ -42,7 +44,7 @@ if len(faces) > 0:
             cv2.circle(img, (shape.part(i).x, shape.part(i).y), 2, (0, 0, 255), -1)
 
 cv2.imshow("teste", img)
-#cv2.waitKey(0)
+# cv2.waitKey(0)
 
 encodig = np.array(face_encoder.compute_face_descriptor(face_image, shape, 1))
 print(encodig)
