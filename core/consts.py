@@ -2,10 +2,10 @@ import os
 
 DATABASE = "database.db"
 
-#URL = "http://localhost:8080/api/token/"
-#URL_PERFIL = "http://localhost:8080/api/user/getdata/"
-#URL_LOG = "http://127.0.0.1:8080/api/auth/control/log/"
-#URL_CHECK_TOKEN = "http://127.0.0.1:8080/api/auth/local/code/"
+# URL = "http://localhost:8080/api/token/"
+# URL_PERFIL = "http://localhost:8080/api/user/getdata/"
+# URL_LOG = "http://127.0.0.1:8080/api/auth/control/log/"
+# URL_CHECK_TOKEN = "http://127.0.0.1:8080/api/auth/local/code/"
 
 URL = "http://vps38284.publiccloud.com.br:8000/api/token/"
 URL_PERFIL = "http://vps38284.publiccloud.com.br:8000/api/user/getdata/"

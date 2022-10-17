@@ -1,3 +1,4 @@
+
 import tkinter as tk
 import cv2
 import dlib
@@ -16,9 +17,18 @@ from core.models import (
     get_face_recognition_dlib,
     get_shape_predictor_dlib,
 )
+from threading import Thread
+from treino import treinar
 
 face_encoder = get_face_recognition_dlib()
 predictor = get_shape_predictor_dlib()
+
+class TrainDataThread(Thread):
+    def __init__(self, users_ids: list):
+        self.users_ids = users_ids
+
+    def run(self):
+        treinar(self.users_ids)
 
 
 class App:
@@ -169,6 +179,9 @@ class App:
 
                     self.counter += 1
             else:
+                th = TrainDataThread([self.id])
+                th.run()
+
                 self.mode = 0
                 self.id = 0
                 self.queue.put(
