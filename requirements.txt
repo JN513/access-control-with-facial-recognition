@@ -13,6 +13,7 @@ opencv-python==4.6.0.66
 pathspec==0.10.1
 Pillow==9.2.0
 platformdirs==2.5.2
+pyzbar==0.1.9
 requests==2.28.1
 tomli==2.0.1
 urllib3==1.26.12

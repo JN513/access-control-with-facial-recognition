@@ -16,6 +16,8 @@ def main(id):
 
     if not os.path.exists("dataset"):
         os.mkdir("dataset")
+    if not os.path.exists("dataset_bgr"):
+        os.mkdir("dataset_bgr")
 
     print("Coletando imagens...")
 
@@ -36,10 +38,12 @@ def main(id):
                 if len(faces) > 0:  # se ele achou uma face
                     contador += 1  # face aumenta mais um
 
-                    if contador <= 100:
+                    if contador <= 10:
                         for (x, y, w, h) in faces:
                             roi = frame_gray[y : y + h, x : x + w]
                             roi = padronizar_face(roi)
+                            roi_bgr = frame[y : y + h, x : x + w]
+                            roi_bgr = padronizar_face(roi_bgr)
                             cv2.imwrite(
                                 "dataset/"
                                 + "u"
@@ -48,6 +52,15 @@ def main(id):
                                 + str(contador)
                                 + ".png",
                                 roi,
+                            )
+                            cv2.imwrite(
+                                "dataset_bgr/"
+                                + "u"
+                                + str(id)
+                                + "_"
+                                + str(contador)
+                                + ".png",
+                                roi_bgr,
                             )
 
                         cv2.putText(

@@ -7,5 +7,6 @@ opencv-contrib-python==4.5.3.56
 opencv-python==4.5.3.56
 picamera==1.13
 Pillow==9.2.0
+pyzbar==0.1.9
 requests==2.28.1
 urllib3==1.26.12

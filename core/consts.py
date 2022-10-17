@@ -5,10 +5,12 @@ DATABASE = "database.db"
 URL = "http://localhost:8080/api/token/"
 URL_PERFIL = "http://localhost:8080/api/user/getdata/"
 URL_LOG = "http://127.0.0.1:8080/api/auth/control/log/"
+URL_CHECK_TOKEN = "http://127.0.0.1:8080/api/auth/local/code/"
 
 TOKEN = os.environ.get("TOKEN")
 
 SALA = 1
+DEVICE_CODE = "de8b6e3d"
 
 STD_DIMENSIONS = {
     "480p": (640, 480),

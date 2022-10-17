@@ -31,7 +31,7 @@ def create_database():
     con = get_database()
     cur = con.cursor()
     cur.execute(
-        "CREATE TABLE encoding ( id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, encoding BLOB NOT NULL );"
+        "CREATE TABLE encoding ( id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, encoding BLOB NOT NULL, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP );"
     )
     con.commit()
 
@@ -59,4 +59,33 @@ def get_all():
     cur = con.cursor()
     cur.execute("SELECT * FROM encoding")
 
-    return cur.fetchall()
+    users = []
+    encodings = []
+
+    for result in cur.fetchall():
+        users.append(result[1])
+        encodings.append(convert_array(result[2]))
+
+    return users, encodings
+
+
+def delete_from_user(user_id):
+    con = get_database()
+    cur = con.cursor()
+    cur.execute("DELETE FROM encoding WHERE user_id = ?", (user_id,))
+    con.commit()
+
+
+def delete_all():
+    con = get_database()
+    cur = con.cursor()
+    cur.execute("DELETE FROM encoding WHERE 1")
+    con.commit()
+
+
+def count_user_encoding(user_id):
+    con = get_database()
+    cur = con.cursor()
+    cur.execute("SELECT COUNT(id) FROM encoding WHERE user_id = ?", (user_id,))
+
+    return cur.fetchone()[0]
