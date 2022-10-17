@@ -23,12 +23,6 @@ from treino import treinar
 face_encoder = get_face_recognition_dlib()
 predictor = get_shape_predictor_dlib()
 
-class TrainDataThread(Thread):
-    def __init__(self, users_ids: list):
-        self.users_ids = users_ids
-
-    def run(self):
-        treinar(self.users_ids)
 
 
 class App:
@@ -61,6 +55,15 @@ class App:
 
         else:
             self.window = self.set_register_screen()
+
+    def treinar(self):
+        treinar([self.id])
+
+        self.users, self.encodings = get_all()
+
+        self.queue.put(
+                    "Treinamento realizado com sucesso"
+                )
 
     def snapshot(self):
         # Get a frame from the video source
@@ -98,6 +101,10 @@ class App:
         if self.vid.ok:
             print("Bater Ponto")
 
+            if len(self.users) == 0:
+                self.queue.put("Usuario não Cadastrado ou sem acesso")
+                return
+
             dlib_react = dlib.rectangle(0, 0, 200, 200)
 
             shape = predictor(roi, dlib_react)
@@ -111,10 +118,13 @@ class App:
                     self.id = self.users[i]
                     break
 
-            self.t1 = multiprocessing.Process(target=self.send_ponto, args=())
-            self.t1.start()
+            if self.id != 0:
+                self.t1 = multiprocessing.Process(target=self.send_ponto, args=())
+                self.t1.start()
 
-            self.vid.id = 0
+            else:
+                self.queue.put("Usuario não Cadastrado ou sem acesso")
+
 
     def update(self):
 
@@ -179,8 +189,8 @@ class App:
 
                     self.counter += 1
             else:
-                th = TrainDataThread([self.id])
-                th.run()
+                self.t2 = multiprocessing.Process(target=self.treinar, args=())
+                self.t2.start()
 
                 self.mode = 0
                 self.id = 0
