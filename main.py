@@ -1,4 +1,3 @@
-
 import tkinter as tk
 import cv2
 import dlib
@@ -17,12 +16,10 @@ from core.models import (
     get_face_recognition_dlib,
     get_shape_predictor_dlib,
 )
-from threading import Thread
 from treino import treinar
 
 face_encoder = get_face_recognition_dlib()
 predictor = get_shape_predictor_dlib()
-
 
 
 class App:
@@ -61,9 +58,7 @@ class App:
 
         self.users, self.encodings = get_all()
 
-        self.queue.put(
-                    "Treinamento realizado com sucesso"
-                )
+        self.queue.put("Treinamento realizado com sucesso")
 
     def snapshot(self):
         # Get a frame from the video source
@@ -124,7 +119,6 @@ class App:
 
             else:
                 self.queue.put("Usuario não Cadastrado ou sem acesso")
-
 
     def update(self):
 
