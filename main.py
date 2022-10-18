@@ -73,7 +73,7 @@ class App:
 
     def snapshot(self):
         # Get a frame from the video source
-        ret, frame = self.vid.get_frame()
+        ret, frame, _ = self.vid.get_frame()
 
         if ret:
             cv2.imwrite(
