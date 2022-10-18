@@ -99,7 +99,7 @@ python main.py
 
 ## Configuração
 
-Para configurar o projeto, edite o arquivo *consts.py* na pasta *core*
+Para configurar o projeto, edite o arquivo *consts.py* na pasta *core*, para utilizar as configurações padrões será necessario exportar um token de autenticação da API.
 
 ## Arquiteura
 
@@ -125,7 +125,7 @@ Para configurar o projeto, edite o arquivo *consts.py* na pasta *core*
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
+Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
 
 ## Agradecimentos
 
