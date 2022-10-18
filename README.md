@@ -18,6 +18,7 @@ Ponto para controle de acesso de alunos no laboratorio de pesquisa utilizando re
 - Dlib 19.24.0 ou superior
 - Numpy 1.23.4 ou superior
 - Pillow 9.2.0 ou superior
+- PyZbar 0.1.9 ou superior
 - Requests 2.28.1 ou superior
 
 ### Hardware:
@@ -131,6 +132,7 @@ Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE](
 
 - [OpenCV](https://opencv.org/)
 - [Dlib](http://dlib.net/)
+- [PyZbar](https://github.com/NaturalHistoryMuseum/pyzbar/)
 - [Laboratório de Tecnologias de Software e Computação Aplicada à Educação - LabSoft](http://labsoft.muz.ifsuldeminas.edu.br/)
 
 ## Duvidas e Sugestões
