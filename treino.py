@@ -65,6 +65,9 @@ def treinar(users_ids: list):
         else:
             continue
 
+    if len(sujeitos_bgr) == 0:
+        return False
+
     for i, image in enumerate(imagens_bgr):
         dlib_react = dlib.rectangle(0, 0, 200, 200)
 
@@ -77,6 +80,8 @@ def treinar(users_ids: list):
         encoding = np.array(face_encoder.compute_face_descriptor(image, shape, 1))
 
         insert_array(sujeitos_bgr[i], encoding)
+
+    return True
 
 
 if __name__ == "__main__":

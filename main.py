@@ -2,6 +2,7 @@ import tkinter as tk
 import os
 import cv2
 import dlib
+import time
 import PIL.Image, PIL.ImageTk
 import time
 from multiprocessing import Queue
@@ -30,7 +31,6 @@ class App:
         self.window_title = window_title
 
         self.atual_window = 0
-        self.after = None
 
         self.video_source = video_source
 
@@ -54,17 +54,24 @@ class App:
         else:
             self.window = self.set_register_screen()
 
+    def update_encodings(self):
+        self.users, self.encodings = get_all()
+        self.size = len(self.users)
+
     def treinar(self):
         self.queue.put("Treinando")
         
-        treinar([self.id])
+        ok = treinar([self.id])
 
-        users, encodings = get_all()
+        time.sleep(5)
 
-        self.users = users
-        self.encodings = encodings
+        if ok:
+            self.update_encodings()
 
-        self.queue.put("Treinamento realizado com sucesso")
+            self.queue.put("Treinamento realizado com sucesso")
+
+        else:
+            self.queue.put("Treinamento não realizado")
 
     def snapshot(self):
         # Get a frame from the video source
@@ -78,7 +85,10 @@ class App:
 
     def check_result(self, queue):
         if not queue.empty():
-            self.label_result["text"] = queue.get()
+            if queue.get() == "update":
+                self.update_encodings()
+            else:
+                self.label_result["text"] = queue.get()
         self.window.after(100, self.check_result, queue)
 
     def send_ponto(self):
@@ -127,7 +137,6 @@ class App:
                 self.queue.put("Usuario não Cadastrado ou sem acesso")
 
     def update(self):
-
         # Get a frame from the video source
         ret, frame, data = self.vid.get_frame()
         # if self.ok:
@@ -139,7 +148,6 @@ class App:
 
         if self.mode == 1 and data != "":
             self.label_result["text"] = "Obtendo Usuario"
-            # self.window.after_cancel(self.after)
 
             status_code, payload = get_user_by_token(data)
 
@@ -166,7 +174,7 @@ class App:
 
                 self.mode = 0
                 self.id = 0
-                self.queue.put(f"Erro ao autenticar Usuario, erro: {payload['error']}")
+                self.queue.put(f"Erro ao autenticar Usuario")
                 self.voltar()
         elif self.mode == 2:
             if self.counter <= 10:
@@ -205,6 +213,7 @@ class App:
                 self.queue.put(
                     "Usuario cadastrado com sucesso, aguarde alguns instantes para as alterações serem aplicadas."
                 )
+
                 self.voltar()
 
         if self.mode != 2:
@@ -336,7 +345,7 @@ class App:
 
         self.label_result = tk.Label(
             footer_frame,
-            text="Resultado",
+            text="Aponte o QRCode para a camera",
             background="black",
             foreground="white",
             font=("Helvetica", 16),
