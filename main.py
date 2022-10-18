@@ -60,10 +60,8 @@ class App:
 
     def treinar(self):
         self.queue.put("Treinando")
-        
-        ok = treinar([self.id])
 
-        time.sleep(5)
+        ok = treinar([self.id])
 
         if ok:
             self.update_encodings()
@@ -159,7 +157,9 @@ class App:
                 else:
                     self.mode = 0
                     self.id = 0
-                    self.queue.put(f"Erro ao autenticar Usuario, erro: {payload['error']}")
+                    self.queue.put(
+                        f"Erro ao autenticar Usuario, erro: {payload['error']}"
+                    )
                     self.voltar()
                     # self.after = self.window.after(self.delay, self.update)
 
