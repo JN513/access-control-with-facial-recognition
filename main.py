@@ -85,10 +85,7 @@ class App:
 
     def check_result(self, queue):
         if not queue.empty():
-            if queue.get() == "update":
-                self.update_encodings()
-            else:
-                self.label_result["text"] = queue.get()
+            self.label_result["text"] = queue.get()
         self.window.after(100, self.check_result, queue)
 
     def send_ponto(self):
@@ -113,7 +110,7 @@ class App:
             print("Bater Ponto")
 
             if len(self.users) == 0:
-                self.queue.put("Usuario não Cadastrado ou sem acesso")
+                self.queue.put("Usuario não Cadastrado ou sem acesso.")
                 return
 
             dlib_react = dlib.rectangle(0, 0, 200, 200)
@@ -137,10 +134,7 @@ class App:
                 self.queue.put("Usuario não Cadastrado ou sem acesso")
 
     def update(self):
-        # Get a frame from the video source
         ret, frame, data = self.vid.get_frame()
-        # if self.ok:
-        #    self.vid.out.write(cv2.cvtColor(frame,cv2.COLOR_RGB2BGR))
 
         if ret:
             self.photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(frame))
