@@ -77,6 +77,14 @@ pip install -r requirements.txt
 
 Para executar o projeto, ative o ambiente virtual e execute o arquivo main.py:
 
+Na primeira execução antes de executar o arquivo main.py, será necessario criar o banco de dados, para isso, abra um shell python e utiliza:
+
+```python
+from core.database_manager import create_database
+create_database()
+```
+
+O procedimento acima será necessario apenas antes de realizar a primeira execução do sistema.
 
 Linux e MacOS:
 ```bash
