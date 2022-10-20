@@ -101,7 +101,7 @@ class App:
         if "success" in payload:
             if payload["success"]:
                 print("Ponto registrado")
-                insert_row([payload['name'],payload['sala'],payload['tipo'], "034857858"]) #payload["datetime"]
+                insert_row([payload['name'],payload['sala'],payload['tipo'], payload["datetime"]]) #payload["datetime"]
                 self.queue.put(
                     f"Ponto de {payload['tipo']} registrado, {payload['name']} na sala {payload['sala']}"
                 )
