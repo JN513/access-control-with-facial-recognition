@@ -38,6 +38,7 @@ class App:
 
         self.ok = False
         self.queue = Queue()
+        self.update_queue = Queue()
         self.delay = 10
         self.id = 0
         self.size = len(self.users)
@@ -64,8 +65,7 @@ class App:
         ok = treinar([self.id])
 
         if ok:
-            self.update_encodings()
-
+            self.update_queue.put("go")
             self.queue.put("Treinamento realizado com sucesso")
 
         else:
@@ -80,6 +80,12 @@ class App:
                 "snapshots/frame-" + time.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg",
                 cv2.cvtColor(frame, cv2.COLOR_RGB2BGR),
             )
+
+    def check_update(self, queue):
+        if not queue.empty():
+            self.update_encodings()
+        self.window.after(500, self.check_update, queue)
+
 
     def check_result(self, queue):
         if not queue.empty():
@@ -117,7 +123,7 @@ class App:
 
             encoding = np.array(face_encoder.compute_face_descriptor(roi_bgr, shape, 1))
 
-            r = list(np.linalg.norm(self.encodings - encoding, axis=1) <= 0.6)
+            r = list(np.linalg.norm(self.encodings - encoding, axis=1) <= 0.4)
 
             for i in range(self.size):
                 if r[i]:
@@ -168,10 +174,11 @@ class App:
 
                 self.mode = 0
                 self.id = 0
+                print(status_code)
                 self.queue.put(f"Erro ao autenticar Usuario")
                 self.voltar()
         elif self.mode == 2:
-            if self.counter <= 10:
+            if self.counter <= 20:
 
                 roi = self.vid.roi
                 roi_bgr = self.vid.roi_bgr
@@ -288,6 +295,7 @@ class App:
         # After it is called once, the update method will be automatically called every delay milliseconds
 
         window_auth.after(100, self.check_result, self.queue)
+        window_auth.after(500, self.check_update, self.update_queue)
 
         self.window = window_auth
 
@@ -347,6 +355,7 @@ class App:
         self.label_result.pack(fill=tk.X)
 
         window_register.after(100, self.check_result, self.queue)
+        window_register.after(500, self.check_update, self.update_queue)
 
         self.window = window_register
 
