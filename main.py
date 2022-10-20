@@ -19,6 +19,7 @@ from core.models import (
     get_shape_predictor_dlib,
 )
 from treino import treinar
+from core.sheets import insert_row
 
 face_encoder = get_face_recognition_dlib()
 predictor = get_shape_predictor_dlib()
@@ -100,6 +101,7 @@ class App:
         if "success" in payload:
             if payload["success"]:
                 print("Ponto registrado")
+                insert_row([payload['name'],payload['sala'],payload['tipo'], "034857858"]) #payload["datetime"]
                 self.queue.put(
                     f"Ponto de {payload['tipo']} registrado, {payload['name']} na sala {payload['sala']}"
                 )

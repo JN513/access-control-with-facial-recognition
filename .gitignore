@@ -2,3 +2,4 @@ env/
 .vscode/
 secrets.env
 *.pyc
+core/sheets/credentials.json
