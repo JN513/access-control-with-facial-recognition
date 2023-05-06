@@ -7,7 +7,6 @@ Ponto para controle de acesso de alunos no laboratorio de pesquisa utilizando re
 ## Autores:
 
 - Julio Nunes Avelar
-- Renan Magalhães
 
 ## Requisitos
 
